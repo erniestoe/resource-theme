@@ -22,6 +22,7 @@
 /wp-admin/
 /wp-includes/
 index.php
+!/wp-content/themes/resource-site-2025/index.php
 license.txt
 readme.html
 wp-*.php
