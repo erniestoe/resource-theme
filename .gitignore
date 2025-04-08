@@ -1,0 +1,37 @@
+# Ignore everything by default
+/*
+
+# Allow the .gitignore and README files
+!.gitignore
+!README.md
+
+# Allow wp-content, but ignore everything inside it by default
+!/wp-content
+/wp-content/*
+
+# Whitelist folders that contain custom code or resources
+!/wp-content/themes
+/wp-content/themes/*
+!/wp-content/themes/resource-site-2025
+
+# Optionally, include plugins if developing custom ones (uncomment the line below)
+# !/wp-content/plugins
+# /wp-content/plugins/*
+
+# Ignore sensitive files and WordPress core
+/wp-admin/
+/wp-includes/
+index.php
+license.txt
+readme.html
+wp-*.php
+wp-config.php
+
+# Ignore user uploads and cache files
+/wp-content/uploads/
+/wp-content/cache/
+
+# Ignore OS and editor-specific files
+.DS_Store
+Thumbs.db
+*.swp
