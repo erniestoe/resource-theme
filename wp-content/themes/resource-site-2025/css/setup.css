@@ -1,0 +1,56 @@
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+html {
+	scroll-behavior: smooth;
+	--main-color: #FFFCE4;
+	--secondary-color: #EF616E;
+}
+
+inner-column {
+	display: block;
+	max-width: 1200px;
+	margin-inline: auto;
+	padding: 20px;
+}
+
+p {
+	line-height: 1.4;
+}
+
+a {
+	display: block;
+	color: inherit;
+	text-decoration: none;
+}
+
+p a {
+	display: inline;
+	color: blue;
+	text-decoration: underline;
+}
+
+picture {
+	display: block;
+}
+
+img {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.visually-hidden {
+   position: absolute;
+   width: 1px;
+   height: 1px;
+   padding: 0;
+   margin: -1px;
+   overflow: hidden;
+   clip: rect(0, 0, 0, 0);
+   white-space: nowrap;
+   border: 0;
+}

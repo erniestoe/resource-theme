@@ -2,22 +2,27 @@
 
 <?php
 	if ( is_page('home') ) {
-		echo "<h1>Home</h1>";
+		include('templates/pages/home.php');
 	}
 
-	if ( is_page('list') ) {
-		$args = array(
-			'post_type' => 'resource',
-		);
+	if ( is_page('resource-list') ) {
+		include('templates/pages/resource-list.php');
+	}
 
-		$loop = new WP_Query( $args );
+	if ( is_page('cart')) {
+		include('templates/pages/pdf-cart.php');
+	}
 
-		while ( $loop-> have_posts() ) : $loop-> the_post();
-			echo "<h2>" . the_title() . "</h2>";
-			the_excerpt();
-		endwhile;
+	if ( is_singular('resource') ) {
+		include('templates/pages/resource-detail.php');
+	}
 
-		wp_reset_postdata();
+	if ( is_404() ) {
+		include('templates/pages/404.php');
+	}
+
+	if ( is_tax('resource-category')) {
+		include('templates/pages/resource-category.php');
 	}
 ?>
 

@@ -1,0 +1,17 @@
+resource-card {
+	display: block;
+	padding: 10px;
+	
+	.button-group {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		@media (width >= 834px) {
+			max-width: 50%;
+		}
+
+		@media (width >= 1200px) {
+			max-width: 25%;
+		}
+	}
+}
