@@ -56,7 +56,7 @@ p {
 	border-radius: 50px;
 	text-transform: uppercase;
 	box-shadow: 4px 4px 0 0 black;
-	transition: all .3s;
+	transition: all .4s;
 }
 
 @media (width >= 1200px) {
@@ -74,6 +74,44 @@ p {
 	text-transform: uppercase;
 }
 
+.resource-filter {
+	display: flex;
+	flex-direction: column;
+	gap:5px;
+}
+
+.pill {
+	display: flex;
+	gap: 10px;
+  input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  font-size: 2rem;
+  padding: 5px;
+  background: black;
+  border-radius: 50%;
+	}
+	input[type="checkbox"]::before {
+  content: "";
+  width: .5rem;
+  height: .5rem;
+  clip-path: circle(50%);
+  transform: scale(0);
+  background-color: var(--main-color);
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+
+
+}
+
+
 /*SITE HEADER*/
 .site-header {
 	.logo {
@@ -85,8 +123,12 @@ p {
 
 	.top-button {
 		position: fixed;
-		bottom: 10px;
-		right: 10px;
+		bottom: 5px;
+		right: 5px;
+		padding: 12px;
+		background-color: black;
+		color: var(--main-color);
+		border-radius: 50px;
 	}
 
 	.site-navigation,
