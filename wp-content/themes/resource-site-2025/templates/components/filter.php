@@ -19,6 +19,6 @@
 				<?php }?>
 			</form>
 		<?php }?>
-		<a href="<?=site_url('/resource-list')?>">Clear filters</a>
+		<a  href="<?=site_url('/resource-list')?>">Clear filters</a>
 	</inner-column>
 </filter>
