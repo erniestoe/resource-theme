@@ -65,15 +65,6 @@ p {
 	}
 }
 
-.category-title {
-	background-color: var(--secondary-color);
-	padding: 12px;
-/*	position: sticky;*/
-	top: 0;
-	text-align: center;
-	text-transform: uppercase;
-}
-
 filter {
 	display: block;
 	inner-column {
@@ -99,8 +90,8 @@ filter {
 			}
 
 			@media (width >= 1000px) {
-				grid-template-columns: 1fr 1fr 1fr; 
-				max-width: 60%;
+/*				grid-template-columns: 1fr 1fr 1fr; */
+				max-width: 40%;
 				max-height: 200px;
 			}
 		}
@@ -146,6 +137,11 @@ filter {
 	input[type="checkbox"]:checked::before {
   	transform: scale(1);
 	}
+}
+
+.pill:hover,
+.pill input:hover {
+	cursor: pointer;
 }
 
 
@@ -240,6 +236,39 @@ filter {
 				box-shadow: none;
 				background-color: var(--secondary-color);
 			}
+		}
+	}
+}
+
+/*RESOURCE GRID (list and archive)*/
+.resource-grid {
+	display: grid;
+	
+	.category-title {
+		background-color: var(--secondary-color);
+		border-radius: 5px;
+/*		padding: 12px;*/
+		position: sticky;
+		top: 0;
+		text-transform: uppercase;
+		min-height: 60px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+/*		text-align: center;*/
+	}
+
+	@media (width >= 1200px) {
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 20px;
+
+		.category-title {
+			grid-column: 1;
+			align-self: start;
+		}
+
+		resource-card {
+			grid-column: 2 / 4;
 		}
 	}
 }

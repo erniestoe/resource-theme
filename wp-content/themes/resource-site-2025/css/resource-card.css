@@ -1,6 +1,14 @@
 resource-card {
-	display: block;
-	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+/*	padding: 10px;*/
+
+	.resource-text {
+		.website {
+			text-decoration: underline;
+		}
+	}
 	
 	.button-group {
 		display: flex;

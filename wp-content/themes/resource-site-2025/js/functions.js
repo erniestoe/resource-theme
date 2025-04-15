@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
       formData.append('action', 'filter_resources');
       formData.append('categories', JSON.stringify(categories));
 
-      fetch(`${filter_script_data.ajax_url}`, {
+      fetch(${filter_script_data.ajax_url}, {
         method: 'POST',
         body: formData
       })

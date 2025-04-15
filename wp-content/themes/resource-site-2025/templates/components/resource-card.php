@@ -1,11 +1,12 @@
 <resource-card>
-	<h2 class="name"><?=the_field('name');?></h2>
-	<p class="description">Information: <?=the_field('description');?></p>
-	<p class="phone">Phone: <?=the_field('phone');?></p>
-	<p class="address">Address: <?=the_field('address');?></p>
-	<a href="<?=the_field('website');?>">Website</a>
+	<div class="resource-text">
+		<h2 class="name strong-voice"><?=the_field('name');?></h2>
+		<p class="description"> <span class="strong-voice">Information:</span> <?=the_field('description');?></p>
+		<p class="phone"> <span class="strong-voice">Phone:</span> <?=the_field('phone');?></p>
+		<p class="address"> <span class="strong-voice">Address:</span> <?=the_field('address');?></p>
+		<a class="website strong-voice" href="<?=the_field('website');?>">Website</a>
+	</div>
 	<div class="button-group">
-		<a href="#"class="button strong-voice">Add to PDF</a>
 		<?php if ( !is_singular('resource') ) { ?>
 			<a href="<?php the_permalink();?>"class="button strong-voice">Read more</a>
 		<?php } ?>

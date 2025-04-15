@@ -1,4 +1,11 @@
 <?php 
+function start_session() {
+    if (!session_id()) {
+        session_start();
+    }
+}
+add_action('init', 'start_session', 1);
+
 function getFile($path) {
 	return dirname(__FILE__) . '/' . $path;
 }
@@ -30,6 +37,7 @@ function enqueue_filter_script() {
 	]);
 }
 add_action('wp_enqueue_scripts', 'enqueue_filter_script');
+
 
 function handle_filter_resources_ajax() {
   $categories = isset($_POST['categories']) ? json_decode(stripslashes($_POST['categories']), true) : [];

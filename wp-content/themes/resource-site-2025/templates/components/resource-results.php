@@ -25,9 +25,12 @@
 
       if ($query->have_posts()) {
       ?>
-      <h2 class="attention-voice category-title" aria-label="Resource Category: <?= esc_html($term->name) ?>">
+      <div class="category-title">
+        <h2 class="attention-voice" aria-label="Resource Category: <?= esc_html($term->name) ?>">
          <?= esc_html($term->name) ?>
-      </h2>
+        </h2>
+      </div>
+      
       <?php
       while ($query->have_posts()) {
          $query->the_post();

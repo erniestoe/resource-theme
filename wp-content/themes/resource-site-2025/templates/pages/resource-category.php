@@ -1,6 +1,9 @@
 <section class="page-section">
-	<inner-column>
-		<h1 class="category-title attention-voice"><?php single_term_title(); ?></h1>
+	<inner-column class="resource-grid">
+		<div class="category-title">
+			<h1 class=" attention-voice"><?php single_term_title(); ?></h1>
+		</div>
+		
 
 		<?php 
     	$term = get_queried_object(); 
