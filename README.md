@@ -1,2 +1,2 @@
 # resource-theme
-A simple open source wordpress theme created with community resources in mind
+Small open source Wordpress theme created for sharing community resources (or whatever really...)
