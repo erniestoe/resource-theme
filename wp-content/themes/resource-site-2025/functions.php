@@ -1,4 +1,6 @@
 <?php 
+//This looks gross... but is a WIP
+
 function start_session() {
     if (!session_id()) {
         session_start();
@@ -73,7 +75,7 @@ function handle_filter_resources_ajax() {
       wp_reset_postdata();
     }
   } else {
-    // No filters checked — return all posts in default grouped format
+    // If no filters are checked default to all resources grouped by category
     $terms = get_terms([
       'taxonomy' => 'category',
       'hide_empty' => false,
@@ -113,6 +115,18 @@ function handle_filter_resources_ajax() {
 add_action('wp_ajax_filter_resources', 'handle_filter_resources_ajax');
 add_action('wp_ajax_nopriv_filter_resources', 'handle_filter_resources_ajax');
 
+function save_filter_selection_to_session() {
+  session_start();
+
+  if (isset($_POST['categories'])) {
+    $_SESSION['active_filters'] = json_decode(stripslashes($_POST['categories']), true);
+  }
+
+  wp_send_json_success();
+}
+add_action('wp_ajax_save_filter_session', 'save_filter_selection_to_session');
+add_action('wp_ajax_nopriv_save_filter_session', 'save_filter_selection_to_session');
+
 function get_term_icon($slug) {
   switch ($slug) {
     case 'childcare-assistance':
@@ -141,3 +155,113 @@ function get_term_icon($slug) {
       return '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M248,208h-8V128a16,16,0,0,0-16-16H168V48a16,16,0,0,0-16-16H56A16,16,0,0,0,40,48V208H32a8,8,0,0,0,0,16H248a8,8,0,0,0,0-16Zm-24-80v80H168V128ZM56,48h96V208H136V160a8,8,0,0,0-8-8H80a8,8,0,0,0-8,8v48H56Zm64,160H88V168h32ZM72,96a8,8,0,0,1,8-8H96V72a8,8,0,0,1,16,0V88h16a8,8,0,0,1,0,16H112v16a8,8,0,0,1-16,0V104H80A8,8,0,0,1,72,96Z"></path></svg>';
   }
 }
+
+
+add_action('template_redirect', function () {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pdf_action'])) {
+    if (!session_id()) session_start();
+
+    if ($_POST['pdf_action'] === 'add_to_cart') {
+      $item = [
+        'title' => sanitize_text_field($_POST['title']),
+        'description' => sanitize_textarea_field($_POST['description']),
+        'phone' => sanitize_text_field($_POST['phone']),
+        'address' => sanitize_text_field($_POST['address']),
+        'website' => esc_url_raw($_POST['website']),
+      ];
+
+  
+      if (!isset($_SESSION['pdf_cart'])) {
+        $_SESSION['pdf_cart'] = [];
+      }
+   
+      foreach ($_SESSION['pdf_cart'] as $existing) {
+        if ($existing['title'] === $item['title']) {
+          wp_redirect($_SERVER['REQUEST_URI']);
+          exit;
+        }
+      }
+
+      $_SESSION['pdf_cart'][] = $item;
+
+      wp_redirect($_SERVER['REQUEST_URI']); // Prevent resubmission
+      exit;
+    }
+
+    if ($_POST['pdf_action'] === 'remove_from_cart' && isset($_POST['index'])) {
+      $index = (int) $_POST['index'];
+
+      if (isset($_SESSION['pdf_cart'][$index])) {
+        unset($_SESSION['pdf_cart'][$index]);
+        $_SESSION['pdf_cart'] = array_values($_SESSION['pdf_cart']);
+      }
+      wp_redirect($_SERVER['REQUEST_URI']);
+      exit;
+    }
+
+    if ($_POST['pdf_action'] === 'download_pdf') {
+      generate_pdf_from_cart(); 
+      exit;
+    }
+  }
+});
+
+//Get session data and generate pdf from resouces when called
+function generate_pdf_from_cart() {
+  if (!session_id()) session_start();
+
+  if (!isset($_SESSION['pdf_cart']) || empty($_SESSION['pdf_cart'])) {
+    wp_die('No resources selected. <a href="' . esc_url(home_url()) . '">Go back</a>');
+  }
+
+  require_once get_template_directory() . '/includes/fpdf/fpdf.php';
+
+  $pdf = new FPDF();
+  $pdf->AddPage();
+  $pdf->SetFont('Arial', 'B', 16);
+  $pdf->Cell(40, 10, 'Community Resources');
+  $pdf->Ln(10);
+
+  foreach ($_SESSION['pdf_cart'] as $resource) {
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(0, 10, $resource["title"], 0, 1);
+
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->MultiCell(0, 6, "Description: " . $resource["description"]);
+    if (!empty($resource["phone"])) {
+      $pdf->Cell(0, 6, "Phone: " . $resource["phone"], 0, 1);
+    }
+    if (!empty($resource["address"])) {
+      $pdf->Cell(0, 6, "Address: " . $resource["address"], 0, 1);
+    }
+    if (!empty($resource["website"])) {
+      $pdf->Cell(0, 6, "Website: " . $resource["website"], 0, 1);
+    }
+
+    $pdf->Ln(10);
+  }
+
+  $pdf->Output("resources.pdf", "D");
+
+  unset($_SESSION['pdf_cart']);
+  exit;
+}
+
+// Removes item from cart -- did this way to get around a weird wp header error
+function handle_pdf_cart_removal() {
+  session_start();
+
+  if (isset($_POST['remove_item'])) {
+    $remove_index = intval($_POST['remove_item']);
+    if (isset($_SESSION['pdf_cart'][$remove_index])) {
+      unset($_SESSION['pdf_cart'][$remove_index]);
+      $_SESSION['pdf_cart'] = array_values($_SESSION['pdf_cart']);
+    }
+  }
+  
+  $redirect_url = !empty($_POST['_redirect']) ? esc_url_raw($_POST['_redirect']) : home_url('/cart');
+  wp_safe_redirect($redirect_url);
+  exit;
+}
+add_action('admin_post_remove_from_pdf_cart', 'handle_pdf_cart_removal');
+add_action('admin_post_nopriv_remove_from_pdf_cart', 'handle_pdf_cart_removal');

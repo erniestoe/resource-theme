@@ -2,18 +2,30 @@ resource-card {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-/*	padding: 10px;*/
 
 	.resource-text {
-		.website {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.links-group {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+
+		a {
 			text-decoration: underline;
+		}
+
+		.update {
+			grid-column: 2;
 		}
 	}
 	
 	.button-group {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
+		
+	
 		@media (width >= 834px) {
 			max-width: 50%;
 		}

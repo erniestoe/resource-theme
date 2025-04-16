@@ -81,7 +81,6 @@ filter {
 			gap: 10px;
 			max-height: 100px;
 			overflow: scroll;
-/*			border: 1px solid black;*/
 			padding: 5px;
 
 			@media (width >= 500px) {
@@ -90,7 +89,6 @@ filter {
 			}
 
 			@media (width >= 1000px) {
-/*				grid-template-columns: 1fr 1fr 1fr; */
 				max-width: 40%;
 				max-height: 200px;
 			}
@@ -243,11 +241,19 @@ filter {
 /*RESOURCE GRID (list and archive)*/
 .resource-grid {
 	display: grid;
+
+	.category-title + resource-card,
+	resource-card + .category-title {
+		margin-top: 20px;
+	}
+
+	resource-card + resource-card {
+		margin-top: 40px;
+	}
 	
 	.category-title {
 		background-color: var(--secondary-color);
 		border-radius: 5px;
-/*		padding: 12px;*/
 		position: sticky;
 		top: 0;
 		text-transform: uppercase;
@@ -255,7 +261,10 @@ filter {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-/*		text-align: center;*/
+
+		@media (width >= 600px) {
+			max-width: 50%;
+		}
 	}
 
 	@media (width >= 1200px) {
@@ -265,6 +274,7 @@ filter {
 		.category-title {
 			grid-column: 1;
 			align-self: start;
+			max-width: 100%;
 		}
 
 		resource-card {
