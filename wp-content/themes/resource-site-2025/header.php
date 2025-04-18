@@ -1,3 +1,8 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +20,10 @@
 			<nav class="site-navigation">
 				<div class="pdf-list">
 					<a href="<?= site_url('/cart'); ?>" class="pdf-list-title strong-voice">
-        				My PDF <span id="listCount">[[]]</span>
+        				Resource PDF 
+        				<span id="listCount">
+        					[<?= isset($_SESSION['pdf_cart']) ? count($_SESSION['pdf_cart']) : 0; ?>]
+        				</span>
     				</a>
 				</div>
 				<?php include('templates/components/site-menu.php'); ?>

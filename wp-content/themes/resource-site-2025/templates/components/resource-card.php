@@ -1,6 +1,6 @@
 <resource-card>
 	<div class="resource-text">
-		<h2 class="name strong-voice"><?= the_field('name'); ?></h2>
+		<h2 class="name strong-voice" id="<?= get_the_ID(); ?>"><?= the_field('name'); ?></h2>
 		<p class="description"> <span class="strong-voice">Information:</span> <?= the_field('description'); ?></p>
 		<p class="phone"> <span class="strong-voice">Phone:</span> <?= the_field('phone'); ?></p>
 		<p class="address"> <span class="strong-voice">Address:</span> <?= the_field('address'); ?></p>
@@ -19,7 +19,7 @@
 	</div>
 
 	<div class="button-group">
-		<form method="post" action="">
+		<form method="post" action="#<?=get_the_ID()?>">
   			<input type="hidden" name="pdf_action" value="add_to_cart">
   			<input type="hidden" name="title" value="<?= the_field('name'); ?>">
   			<input type="hidden" name="description" value="<?= the_field('description'); ?>">

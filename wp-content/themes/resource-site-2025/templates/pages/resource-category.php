@@ -11,7 +11,7 @@
       	'post_type' => 'resource',
       	'tax_query' => [
         		[
-          		'taxonomy' => 'category', 
+          		'taxonomy' => 'resource-category', 
           		'field'    => 'slug',
           		'terms'    => $term->slug,
         		],

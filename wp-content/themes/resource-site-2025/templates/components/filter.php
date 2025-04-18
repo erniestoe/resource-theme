@@ -6,9 +6,8 @@ $active_filters = $_SESSION['active_filters'] ?? [];
 	<inner-column>
 		<?php 
 		$categories = get_terms([
-			'taxonomy' => 'category',
-			'hide_empty' => false, 
-      	'exclude' => [get_cat_ID('Uncategorized')]
+			'taxonomy' => 'resource-category',
+			
 		]);
 
 		if (!empty($categories) && !is_wp_error($categories)) { ?>
@@ -24,6 +23,6 @@ $active_filters = $_SESSION['active_filters'] ?? [];
 				<?php }?>
 			</form>
 		<?php }?>
-		<a  href="<?=get_template_directory_uri();?>/reset-filters.php">Clear filters</a>
+		<a class="reset-filters"  href="<?=get_template_directory_uri();?>/reset-filters.php">Reset Filters</a>
 	</inner-column>
 </filter>

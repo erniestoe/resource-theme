@@ -6,19 +6,19 @@ $selected_categories = isset($_SESSION['active_filters']) ? $_SESSION['active_fi
 if (!empty($selected_categories)) {
     // Only show filtered categories
     foreach ($selected_categories as $slug) {
-        $term = get_term_by('slug', $slug, 'category');
+        $term = get_term_by('slug', $slug, 'resource-category');
         if (!$term) continue;
 
         $args = [
             'post_type' => 'resource',
             'tax_query' => [
                 [
-                    'taxonomy' => 'category',
+                    'taxonomy' => 'resource-category',
                     'field'    => 'slug',
                     'terms'    => $slug,
                 ],
             ],
-            'posts_per_page' => -1
+            'posts_per_page' => 5,
         ];
 
         $query = new WP_Query($args);
@@ -35,6 +35,14 @@ if (!empty($selected_categories)) {
                 $query->the_post();
                 include getFile('templates/components/resource-card.php');
             }
+
+            if ( $query->found_posts > 5 ): ?>
+                <p class="see-all">
+                <a href="<?= esc_url( get_term_link($term) ) ?>">
+                 See all <?= esc_html( $query->found_posts ) ?> <?= esc_html( $term->name ) ?> →
+                </a>
+            </p>
+            <?php endif;
         }
 
         wp_reset_postdata();
@@ -42,7 +50,7 @@ if (!empty($selected_categories)) {
 } else {
     // Show all resources if no filters saved (default / fallback)
     $terms = get_terms([
-        'taxonomy' => 'category',
+        'taxonomy' => 'resource-category',
         'hide_empty' => false, 
         'exclude' => [get_cat_ID('Uncategorized')], 
     ]);
@@ -52,12 +60,12 @@ if (!empty($selected_categories)) {
             'post_type' => 'resource',
             'tax_query' => [
                 [
-                    'taxonomy' => 'category',
+                    'taxonomy' => 'resource-category',
                     'field'    => 'slug',
                     'terms'    => $term->slug,
                 ],
             ],
-            'posts_per_page' => -1
+            'posts_per_page' => 5
         ];
 
         $query = new WP_Query($args);
@@ -74,6 +82,14 @@ if (!empty($selected_categories)) {
                 $query->the_post();
                 include getFile('templates/components/resource-card.php');
             }
+
+            if ( $query->found_posts > 5 ): ?>
+                <p class="see-all strong-voice">
+                    <a  href="<?= esc_url( get_term_link($term) ) ?>">
+                    See all <?= esc_html( $query->found_posts ) ?> resources in <?= esc_html( $term->name ) ?> →
+                    </a>
+                </p>
+            <?php endif;
         }
 
         wp_reset_postdata();

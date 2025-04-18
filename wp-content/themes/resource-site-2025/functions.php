@@ -1,5 +1,5 @@
 <?php 
-//This looks gross... but is a WIP
+//This looks gross... but issa WIP
 
 function start_session() {
     if (!session_id()) {
@@ -48,14 +48,14 @@ function handle_filter_resources_ajax() {
 
   if (!empty($categories)) {
     foreach ($categories as $slug) {
-      $term = get_term_by('slug', $slug, 'category');
+      $term = get_term_by('slug', $slug, 'resource-category');
 
       $args = [
         'post_type' => 'resource',
-        'posts_per_page' => -1,
+        'posts_per_page' => 5,
         'tax_query' => [
           [
-            'taxonomy' => 'category',
+            'taxonomy' => 'resource-category',
             'field'    => 'slug',
             'terms'    => $slug,
           ]
@@ -77,7 +77,7 @@ function handle_filter_resources_ajax() {
   } else {
     // If no filters are checked default to all resources grouped by category
     $terms = get_terms([
-      'taxonomy' => 'category',
+      'taxonomy' => 'resource-category',
       'hide_empty' => false,
       'exclude' => [get_cat_ID('Uncategorized')],
     ]);
@@ -85,10 +85,10 @@ function handle_filter_resources_ajax() {
     foreach ($terms as $term) {
       $args = [
         'post_type' => 'resource',
-        'posts_per_page' => -1,
+        'posts_per_page' => 5,
         'tax_query' => [
           [
-            'taxonomy' => 'category',
+            'taxonomy' => 'resource-category',
             'field'    => 'slug',
             'terms'    => $term->slug,
           ]
@@ -103,6 +103,8 @@ function handle_filter_resources_ajax() {
           $query->the_post();
           include get_template_directory() . '/templates/components/resource-card.php';
         }
+
+
       }
 
       wp_reset_postdata();

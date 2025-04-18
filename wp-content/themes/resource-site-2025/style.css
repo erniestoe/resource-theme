@@ -97,12 +97,14 @@ filter {
 
 	a {
 		align-self: end;
+		text-decoration: underline;
 
 		@media (width >= 580px) {
 			align-self: start;
 		}
 	}
 	margin-bottom: 40px;
+
 }
 
 
@@ -283,7 +285,44 @@ filter {
 	}
 }
 
-/*RESOURCE LIST PAGE*/
+/*PDF CART PAGE*/
 .page-section {
+	inner-column {
+		h1 + form {
+			margin-top: 20px;
+		}
 
+		form {
+			.cart-resources + button,
+			a + button {
+				margin-top: 20px;
+			}
+
+			li + li {
+				margin-top: 40px;
+			}
+
+			.cart-resources {
+				li {
+					p,
+					a {
+						text-wrap: pretty;
+					}
+
+					p + p,
+					P + a {
+						margin-top: 12px;
+					}
+
+					@media (width >= 500px) {
+						max-width: 80%;
+					}
+
+					@media (width >= 1000px) {
+						max-width: 50%;
+					}
+				}
+			}
+		}
+	}
 }
