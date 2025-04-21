@@ -27,4 +27,4 @@
     	wp_reset_postdata();
     	?>
 	</inner-column>
-</section>
+</section>	

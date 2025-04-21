@@ -1,5 +1,49 @@
 <?php 
 //This looks gross... but issa WIP
+function cptui_register_my_cpts() {
+
+  /**
+   * Post Type: Resources.
+   */
+
+  $labels = [
+    "name" => esc_html__( "Resources", "resourcesite2025" ),
+    "singular_name" => esc_html__( "Resource", "resourcesite2025" ),
+  ];
+
+  $args = [
+    "label" => esc_html__( "Resources", "resourcesite2025" ),
+    "labels" => $labels,
+    "description" => "",
+    "public" => true,
+    "publicly_queryable" => true,
+    "show_ui" => true,
+    "show_in_rest" => true,
+    "rest_base" => "",
+    "rest_controller_class" => "WP_REST_Posts_Controller",
+    "rest_namespace" => "wp/v2",
+    "has_archive" => false,
+    "show_in_menu" => true,
+    "show_in_nav_menus" => true,
+    "delete_with_user" => false,
+    "exclude_from_search" => false,
+    "capability_type" => "post",
+    "map_meta_cap" => true,
+    "hierarchical" => false,
+    "can_export" => false,
+    "rewrite" => [ "slug" => "resources", "with_front" => true ],
+    "query_var" => true,
+    "menu_icon" => "dashicons-book",
+    "supports" => [ "title", "editor", "thumbnail" ],
+    "taxonomies" => [ "resource-category" ],
+    "show_in_graphql" => false,
+  ];
+
+  register_post_type( "resource", $args );
+}
+
+add_action( 'init', 'cptui_register_my_cpts' );
+
 
 function start_session() {
     if (!session_id()) {
