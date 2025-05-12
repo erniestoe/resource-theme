@@ -234,7 +234,7 @@ add_action('template_redirect', function () {
       exit;
     }
 
-    if ($_POST['pdf_action'] === 'remove_from_cart' && isset($_POST['index'])) {
+    if ($_POST['pdf_action'] === 'remove_item_from_cart' && isset($_POST['index'])) {
       $index = (int) $_POST['index'];
 
       if (isset($_SESSION['pdf_cart'][$index])) {
@@ -247,6 +247,23 @@ add_action('template_redirect', function () {
 
     if ($_POST['pdf_action'] === 'download_pdf') {
       generate_pdf_from_cart(); 
+      exit;
+    }
+
+    if ($_POST['pdf_action'] === 'remove_pdf') {
+      unset($_SESSION['pdf_cart']);
+
+      // For JS requests (like fetch), return plain text instead of redirect
+      if (
+        !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+        strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+      ) {
+        echo 'cleared';
+        exit;
+      }
+
+      // Otherwise redirect (e.g., if JS is off)
+      wp_redirect($_SERVER['REQUEST_URI']);
       exit;
     }
   }

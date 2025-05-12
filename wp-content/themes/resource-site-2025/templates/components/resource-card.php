@@ -1,4 +1,16 @@
 <resource-card>
+	<?php
+	$isInCart = false;
+	if (!empty($_SESSION['pdf_cart'])) {
+		foreach ($_SESSION['pdf_cart'] as $item) {
+			if ($item['title'] === get_field('name')) {
+				$isInCart = true;
+				break;
+			}
+		}
+	}
+	?>
+
 	<div class="resource-text">
 		<h2 class="name strong-voice" id="<?= get_the_ID(); ?>"><?= the_field('name'); ?></h2>
 		<p class="description"> <span class="strong-voice">Information:</span> <?= the_field('description'); ?></p>
@@ -26,7 +38,9 @@
   			<input type="hidden" name="phone" value="<?= the_field('phone'); ?>">
   			<input type="hidden" name="address" value="<?= the_field('address'); ?>">
   			<input type="hidden" name="website" value="<?= the_field('website'); ?>">
-  			<button class="button strong-voice" type="submit">Add to PDF</button>
+  			<button class="button strong-voice" type="submit" <?= $isInCart ? 'disabled' : ''?>>
+  				<?= $isInCart ? 'In PDF' : 'Add to PDF'?>
+  			</button>
 		</form>
 	</div>
 </resource-card>
