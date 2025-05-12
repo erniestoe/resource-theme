@@ -117,7 +117,6 @@ document.addEventListener('DOMContentLoaded', function () {
       const formData = new FormData(clearForm);
 
       formData.append(clearButton.name, clearButton.value);
-      console.log('Clearing cart...', Object.fromEntries(formData));
 
       try {
         const response = await fetch(window.location.href, {
