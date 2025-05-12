@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(html => {
           document.querySelector('#resource-results').innerHTML = html;
           addToCart(); //Re-initilizing the cart "behavior" on newly rendered content
+          removeItemFromCart();
         })
         .catch(error => {
           console.error('Error:', error);
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
             listCountElement.textContent = `[${currentCount}]`;
             
           } else {
-            alert("Failed to add to the PDF cart!")
+            alert("Failed to add to the PDF cart!");
           }
         } catch (error) {
           console.error('Error:', error)
@@ -69,39 +70,48 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   };
-  
 
   function removeItemFromCart() {
-    document.addEventListener('submit', async function(event) {
-      if (event.target.matches('form')) {
-        const submitter = event.submitter;
-        if (submitter && submitter.value == 'remove_item_from_cart') {
-          event.preventDefault();
+    const removeForms = document.querySelectorAll('form'); 
+    removeForms.forEach(form => {
+      const isRemoveForm = form.querySelector('input[name="pdf_action"][value="remove_item_from_cart"]');
+      if (!isRemoveForm) return; 
 
-          const form = event.target;
-          const formData = new FormData(form);
-          const listCountElement = document.querySelector('#listCount');
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
 
-          try {
-            const response = await fetch(window.location.href, {
-              method: 'POST',
-              body: formData
-            });
+        const formData = new FormData(form);
+        const listCountElement = document.querySelector('#listCount');
 
-            if (response.ok) {
-              submitter.closest('li').remove();
+        try {
+          const response = await fetch(window.location.href, {
+            method: 'POST',
+            body: formData
+          });
 
-              let currentCount = parseInt(listCountElement.textContent.replace(/\D/g, '') || '0');
-              currentCount = Math.max(currentCount - 1, 0);
-              listCountElement.textContent = `[${currentCount}]`;
+          if (response.ok) {
+            form.closest('li').remove();
+
+            let currentCount = parseInt(listCountElement.textContent.replace(/\D/g, '') || '0');
+            currentCount = Math.max(currentCount - 1, 0);
+            listCountElement.textContent = `[${currentCount}]`;
+
+            if (currentCount === 0) {
+              const container = document.querySelector('.message');
+              if (container) {
+                container.innerHTML = `<p>Your resources PDF is empty. <a href="javascript:history.go(-1)">Go back?</a></p>`;
+              }
+
+              const buttonsElement = document.querySelector('.buttons');
+                buttonsElement.style.display = "none"
             }
-          } catch (error) {
-            console.error('Failed to remove this item from the cart', error);
           }
+        } catch (error) {
+          console.error('Failed to remove this item from the cart', error);
         }
-      }
+      });
     });
-  };
+  }
 
   function clearCart() {
     const clearButton = document.querySelector('form button[name="pdf_action"][value="remove_pdf"]');

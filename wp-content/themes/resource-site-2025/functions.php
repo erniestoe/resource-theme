@@ -202,7 +202,6 @@ function get_term_icon($slug) {
   }
 }
 
-
 add_action('template_redirect', function () {
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pdf_action'])) {
     if (!session_id()) session_start();
@@ -234,17 +233,6 @@ add_action('template_redirect', function () {
       exit;
     }
 
-    if ($_POST['pdf_action'] === 'remove_item_from_cart' && isset($_POST['index'])) {
-      $index = (int) $_POST['index'];
-
-      if (isset($_SESSION['pdf_cart'][$index])) {
-        unset($_SESSION['pdf_cart'][$index]);
-        $_SESSION['pdf_cart'] = array_values($_SESSION['pdf_cart']);
-      }
-      wp_redirect($_SERVER['REQUEST_URI']);
-      exit;
-    }
-
     if ($_POST['pdf_action'] === 'download_pdf') {
       generate_pdf_from_cart(); 
       exit;
@@ -253,7 +241,6 @@ add_action('template_redirect', function () {
     if ($_POST['pdf_action'] === 'remove_pdf') {
       unset($_SESSION['pdf_cart']);
 
-      // For JS requests (like fetch), return plain text instead of redirect
       if (
         !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
         strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
@@ -262,7 +249,26 @@ add_action('template_redirect', function () {
         exit;
       }
 
-      // Otherwise redirect (e.g., if JS is off)
+      wp_redirect($_SERVER['REQUEST_URI']);
+      exit;
+    }
+
+    if ($_POST['pdf_action'] === 'remove_item_from_cart' && isset($_POST['index'])) {
+      $index = (int) $_POST['index'];
+
+      if (isset($_SESSION['pdf_cart'][$index])) {
+        unset($_SESSION['pdf_cart'][$index]);
+        $_SESSION['pdf_cart'] = array_values($_SESSION['pdf_cart']);
+      }
+
+      if (
+        !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+        strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+      ) {
+        echo 'removed';
+        exit;
+      }
+
       wp_redirect($_SERVER['REQUEST_URI']);
       exit;
     }
@@ -307,23 +313,6 @@ function generate_pdf_from_cart() {
   $pdf->Output("resources.pdf", "D");
 
   unset($_SESSION['pdf_cart']);
-  exit;
-}
-
-// Removes item from cart -- did this way to get around a weird wp header error
-function handle_pdf_cart_removal() {
-  session_start();
-
-  if (isset($_POST['remove_item'])) {
-    $remove_index = intval($_POST['remove_item']);
-    if (isset($_SESSION['pdf_cart'][$remove_index])) {
-      unset($_SESSION['pdf_cart'][$remove_index]);
-      $_SESSION['pdf_cart'] = array_values($_SESSION['pdf_cart']);
-    }
-  }
-  
-  $redirect_url = !empty($_POST['_redirect']) ? esc_url_raw($_POST['_redirect']) : home_url('/cart');
-  wp_safe_redirect($redirect_url);
   exit;
 }
 add_action('admin_post_remove_from_pdf_cart', 'handle_pdf_cart_removal');
