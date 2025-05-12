@@ -1,0 +1,30 @@
+pdf-cart{
+	display: block;
+	
+	ul,
+	li {
+		display: grid;
+	}
+
+	ul {
+		gap: 40px;
+	}
+
+	li {
+		gap: 10px;
+
+		@media(width >= 776px) {
+			max-width: 80%;
+		}
+	}
+
+	ul + form {
+		margin-top: 40px;
+	}
+
+	.buttons {
+		button + button {
+			margin-top: 15px;
+		}
+	}
+}

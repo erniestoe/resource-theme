@@ -2,6 +2,7 @@
 
 <section class="page-section">
   <inner-column>
+    <pdf-cart>
       <h1 class="attention-voice">Resource PDF</h1>
 
       <?php if (!empty($_SESSION['pdf_cart'])){ ?>
@@ -44,5 +45,6 @@
       <?php } else { ?>
         <p>Your resources PDF is empty. <a href="javascript:history.go(-1)">Go back?</a></p>
       <?php } ?>
+    </pdf-cart>  
   </inner-column>
 </section>

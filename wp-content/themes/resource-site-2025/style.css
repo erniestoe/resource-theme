@@ -14,6 +14,7 @@ Use it to make something cool, have fun, and share what you've learned with othe
 @import "css/reset.css";
 @import "css/setup.css";
 @import "css/resource-card.css";
+@import "css/pdf-cart.css";
 @import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap');
 
 body {
