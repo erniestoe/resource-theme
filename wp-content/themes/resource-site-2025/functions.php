@@ -202,7 +202,7 @@ function get_term_icon($slug) {
   }
 }
 
-add_action('template_redirect', function () {
+add_action('init', function () {
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pdf_action'])) {
     if (!session_id()) session_start();
 
@@ -215,11 +215,10 @@ add_action('template_redirect', function () {
         'website' => esc_url_raw($_POST['website']),
       ];
 
-  
       if (!isset($_SESSION['pdf_cart'])) {
         $_SESSION['pdf_cart'] = [];
       }
-   
+
       foreach ($_SESSION['pdf_cart'] as $existing) {
         if ($existing['title'] === $item['title']) {
           wp_redirect($_SERVER['REQUEST_URI']);
@@ -229,12 +228,7 @@ add_action('template_redirect', function () {
 
       $_SESSION['pdf_cart'][] = $item;
 
-      wp_redirect($_SERVER['REQUEST_URI']); // Prevent resubmission
-      exit;
-    }
-
-    if ($_POST['pdf_action'] === 'download_pdf') {
-      generate_pdf_from_cart(); 
+      wp_redirect($_SERVER['REQUEST_URI']);
       exit;
     }
 
@@ -273,47 +267,7 @@ add_action('template_redirect', function () {
       exit;
     }
   }
-});
+}, 0); // Use priority 0 to run before almost everything
 
-//Get session data and generate pdf from resouces when called
-function generate_pdf_from_cart() {
-  if (!session_id()) session_start();
-
-  if (!isset($_SESSION['pdf_cart']) || empty($_SESSION['pdf_cart'])) {
-    wp_die('No resources selected. <a href="' . esc_url(home_url()) . '">Go back</a>');
-  }
-
-  require_once get_template_directory() . '/includes/fpdf/fpdf.php';
-
-  $pdf = new FPDF();
-  $pdf->AddPage();
-  $pdf->SetFont('Arial', 'B', 16);
-  $pdf->Cell(40, 10, 'Community Resources');
-  $pdf->Ln(10);
-
-  foreach ($_SESSION['pdf_cart'] as $resource) {
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 10, $resource["title"], 0, 1);
-
-    $pdf->SetFont('Arial', '', 10);
-    $pdf->MultiCell(0, 6, "Description: " . $resource["description"]);
-    if (!empty($resource["phone"])) {
-      $pdf->Cell(0, 6, "Phone: " . $resource["phone"], 0, 1);
-    }
-    if (!empty($resource["address"])) {
-      $pdf->Cell(0, 6, "Address: " . $resource["address"], 0, 1);
-    }
-    if (!empty($resource["website"])) {
-      $pdf->Cell(0, 6, "Website: " . $resource["website"], 0, 1);
-    }
-
-    $pdf->Ln(10);
-  }
-
-  $pdf->Output("resources.pdf", "D");
-
-  unset($_SESSION['pdf_cart']);
-  exit;
-}
 add_action('admin_post_remove_from_pdf_cart', 'handle_pdf_cart_removal');
 add_action('admin_post_nopriv_remove_from_pdf_cart', 'handle_pdf_cart_removal');

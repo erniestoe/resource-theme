@@ -29,11 +29,12 @@
               </li>
             <?php } ?>
           </ul>
-          <form method="post">
+
+
+
+          <form method="post" action="<?= admin_url('admin-post.php'); ?>">
             <div class="buttons">
-              <button class="button strong-voice" type="submit" name="pdf_action" value="download_pdf">
-                Download PDF
-             </button>
+            <button class="button strong-voice" onclick="window.print()">Print / Save as PDF</button>
 
               <button class="button strong-voice" type="submit" name="pdf_action" value="remove_pdf">
                 Remove all
